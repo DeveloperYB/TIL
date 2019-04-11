@@ -33,8 +33,8 @@
 자바스크립트 엔진과 유사하게, 다른 브라우저들도 다른 렌더링 엔진을 사용한다.
 아래 몇가지 예시
 
-Gecko — Firefox
-WebKit — Safari
+Gecko — Firefox\
+WebKit — Safari\
 Blink — Chrome, Opera (버전 15 이후)
 
 ---
@@ -73,12 +73,6 @@ Blink — Chrome, Opera (버전 15 이후)
 - 오랫동안 실행 중인 JavaScript 계산을 웹 작업자로 이동. dom 의 시각적 업데이트의 처음과 끝만 시각적 변화 작업을 하기.
 
 - 마이크로 작업을 사용하여 여러 프레임에 대한 DOM 변경 사항을 정하기.
-
-\
-\
-\
-\
-\
 
 > 이 문서는 "Alexander Zlatkov"의 글 중 일부를 번역한 글입니다.
 
