@@ -14,4 +14,4 @@
 
 ### MarkDown Link
 
-<!-- - [WebTech](./WebTech/README.md) -->
+- [ES6](./ES6/README.md)
