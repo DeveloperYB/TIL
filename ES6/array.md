@@ -112,3 +112,109 @@ arr3.sort(); // 값 무변동
 arr3.sort((a,b)=>a.name > b.name); // arr은 name 프로퍼티의 알파벳 순으로 정렬
 arr3.sort((a,b)=>a.name[1] < b.name[1]); // arr은 name 프로퍼티의 두 번째 글자의 알파벳 역순으로 정렬
 ```
+
+---
+
+## 배열 검색
+
+#### indexOf, lastIndexOf
+```js
+const o = {name:'wabi',age:29};
+const arr = [1,5,'a',o,true,5,[1,2],'9'];
+arr.indexOf(5); // 1
+arr.lastIndexOf(5) // 5
+arr.indexOf('a') // 2
+arr.lastIndexOf('a') // 2
+arr.indexOf({name:'wabi',age:29}) // -1
+arr.indexOf(o) // 3
+arr.indexOf([1,2]) // -1
+arr.indexOf('9') //7
+arr.indexOf(9) // -1
+
+arr.indexOf('a',5) // -1
+arr.indexOf(5,5) // 5
+arr.lastIndexOf(5,4) // 1
+arr.lastIndexOf(true,3) // -1
+```
+
+#### findIndex
+```js
+const arr = [{id:5,name:'Wabi'},{id:6,name:'Yuna'}];
+arr.findIndex( o => o.id === 6); // 1
+arr.findIndex( o => o.name === 'Francis'); // -1
+arr.findIndex( o => o.name === 'Wabi'); // 0
+```
+
+#### find
+> 하단코드 예시) index 3 이상, 거듭제곱수 구하기
+```js
+const arr = [1,17,16,7,4,16,10,3,49];
+arr.find((x,i) => i >= 3 && Number.isInteger(Math.sqrt(x))); // 4
+```
+> Math.sqrt : 제곱근을 반환 \
+Number.isInteger : 정수 상황 Boolean
+
+#### find (with this)
+```js
+class Person {
+    constructor(name){
+        this.name = name;
+        this.id = Person.nextId++;
+    }
+}
+Person.nextId = 0;
+const Wabi = new Person('Wabi'),
+Yuna = new Person('Yuna'),
+Yuri = new Person('Yuri'),
+Zinico = new Person('Zinico'),
+Suk = new Person('Suk');
+
+const arr = [Wabi,Yuna,Yuri,Zinico,Suk];
+
+// 방법 1 : ID 를 직접 비교하는 방법
+arr.find(p => p.id === Wabi.id); // Wabi 객체 반환
+
+// 방법 2 : "this" 매개변수를 이용하는 방법
+arr.find(function(p){
+    return p.id === this.id
+},Yuna); // Yuna 객체 반환
+```
+
+#### some, every
+
+```js
+const arr = [5,7,29,12,3,19];
+arr.some(x => x%2 === 0); // true; 12 는 짝수
+arr.some(x => Number.isInteger(Math.sqrt(x)) ); // false; 제곱수가 없습니다.
+```
+
+```js
+const arr = [4,6,16,36];
+arr.every(x => x%2 === 0); // true; 홀수가 없습니다.
+arr.every(x => Number.isInteger(Math.sqrt(x)) ); // false;  6은 제곱수가 아닙니다.
+```
+
+#### map, filter
+
+```js
+const people = [
+    {name : 'Wabi', age : 29, gender : 'male'},
+    {name : 'Yuna', age : 30, gender : 'female'}
+];
+const names = people.map(x => x.name); // ['Wabi','Yuna']
+const genders = people.map(x => x.gender); // ['male','female']
+const ages = people.map(x => x.age); // [29,30]
+const nextAges = people.map(x => x.age + 1); // [30,31]
+
+const newPeople = names.map((x,i)=>({
+    name : x,
+    age : ages[i],
+    nextAge : nextAges[i],
+    gender : genders[i]
+})); // 이렇게 다시 합치는 용도로 쓸 일은 없지만... ㅎㅎ
+```
+
+```js
+
+```
+---
