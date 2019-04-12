@@ -1,3 +1,7 @@
+## 배열
+
+[요약 바로가기](./#요약)
+
 ## 배열 Array
 
 > 자바스크립트는 루비 같은 언어와 다르게 (str.downcase, str.downcase!) 함수이름만 봐서는 대상 자체를 수정하는지, 아니면 새로운 것을 반환 하는지 모른다... 그러니 외우자....
@@ -193,8 +197,8 @@ const arr = [4,6,16,36];
 arr.every(x => x%2 === 0); // true; 홀수가 없습니다.
 arr.every(x => Number.isInteger(Math.sqrt(x)) ); // false;  6은 제곱수가 아닙니다.
 ```
-
-#### map, filter
+---
+## map, filter
 
 ```js
 const people = [
@@ -215,6 +219,75 @@ const newPeople = names.map((x,i)=>({
 ```
 
 ```js
+const cards = [];
+for(let suit of ['H','C','D','S']){
+    for(let val = 1; val <= 13; val++){
+        cards.push({val,suit});
+    }
+}
 
+//val === 2
+cards.filter( c => c.val === 2);
+/*
+[
+    {suit : 'H' , val : 2},
+    {suit : 'C' , val : 2},
+    {suit : 'D' , val : 2},
+    {suit : 'S' , val : 2}
+]
+*/
 ```
+---
+## reduce
+
+```js
+const arr = [5,10,5,5];
+//초기값 설정
+const sum = arr.reduce((a,x) => a += x, 0); // 25
+//초기값 미설정시, idx 0 을 참조.
+const sum = arr.reduce((a,x) => a += x); // 25
+```
+> MDN web docs 참조 : https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce
+
+```js
+const words = ['Hi','My','name','is','Youbeen Kim','Just call','me','Wabi','Thx'];
+const alphabets = words.reduce((a,x)=>{
+    let fx = x[0].toUpperCase();
+    if(!a[fx]) a[fx] = [];
+    a[fx].push(x);
+    return a;
+},{});
+/*
+{
+    "H":["Hi"],
+    "M":["My","me"],
+    "N":["name"],
+    "I":["is"],
+    "Y":["Youbeen Kim"],
+    "J":["Just call"],
+    "W":["Wabi"],
+    "T":["Thx"]
+}
+*/
+```
+---
+## 문자열 병합 
+
+```js
+const attributes = ['Nim','HiYo','Nanun','Wabi'];
+const html = `<ul><li>`+attributes.join(`</li><li>`)+`</li></ul>`;
+```
+---
+## 요약
+
+#### 배열 함수의 매개변수(순서대로)
+|메서드|설명|
+|---|---|
+|reduce에만 적용|누적값, 초깃값 또는 마지막 호출에서 반환한 값|
+|모든 메서드|요소 (현재 요소의 값)|
+|모든 메서드|현재 요소의 인덱스|
+|모든 메서드|배열 자체 (그다지 쓸모없음)|
+
+#### 배열 콘텐츠 조작
+
 ---
