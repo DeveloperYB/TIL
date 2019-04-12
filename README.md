@@ -14,5 +14,6 @@
 
 ### MarkDown Link
 
-- [javascript](./javascript/README.md)
+- [Javascript](./javascript/README.md)
 - [ES6](./ES6/README.md)
+- [Logic : js](./logic/README.md)
