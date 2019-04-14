@@ -56,3 +56,33 @@ userRoles.size; // 3
 
 > 요소를 지울때는 delete() \
 모두 지울 때는 clear()
+
+## WeakMap
+
+Map과 차이점
+- 키는 반드시 객체여야 합니다.
+- WeakMap의 키는 가비지 콜렉션에 포함될 수 있다.
+- WeakMap은 이터러블이 아니며 clear() 메서드도 없습니다.
+
+```js
+const SecretHolder = (function(){
+    const secrets = new WeakMap();
+    return class {
+        setSecret(secret){
+            secrets.set(this, secret);
+        }
+        getSecret(){
+            return secrets.get(this);
+        }
+    }
+})();
+
+const a = new SecretHolder();
+const b = new SecretHolder();
+
+a.setSecret('secret A');
+b.setSecret('secret B');
+
+a.getSecret(); // secret A
+b.getSecret(); // secret B
+```
