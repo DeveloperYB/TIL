@@ -126,3 +126,7 @@ for(let child of children){
 }
 ```
 
+> 참조하면 좋은 블로그글\
+Kevin Seokyou Hong, hongkevin님 블로그글\
+https://medium.com/@hongkevin/js-5-es6-map-set-2a9ebf40f96b
+
