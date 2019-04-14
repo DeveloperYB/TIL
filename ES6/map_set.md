@@ -1,4 +1,4 @@
-## Map & Set
+# Map & Set
 
 ES6 이전 키와 값을 연결하는데 객체 사용시, 생기는 여러가지 단점.
 
@@ -8,7 +8,8 @@ ES6 이전 키와 값을 연결하는데 객체 사용시, 생기는 여러가�
 - 객체는 프로퍼티 순서를 전혀 보장하지 않습니다.
 
 > 맵은 키와 값을 연결한다는 점에서 객체와 비슷하고, 셋은 중복을 허용하지 않는다는 점을 제외 하면 배열과 비슷합니다.
-
+---
+## Map
 ```js
 const u1 = {name : 'Wabi'};
 const u2 = {name : 'Yuna'};
@@ -86,3 +87,42 @@ b.setSecret('secret B');
 a.getSecret(); // secret A
 b.getSecret(); // secret B
 ```
+---
+## Set
+
+> 중복을 허용하지 않는 데이터 집합
+
+```js
+const roles = new Set();
+
+roles.add('User'); // Set ['User']
+roles.add('Admin'); // Set ['User','Admin']
+
+roles.size; // 2
+roles.add('User'); // Set ['User','Admin']
+```
+
+## WeakSet
+
+> WeakMap 과 마찬가지로 이터러블이 아니고, 가비지 콜렉션의 대상이 된다. \
+쓰이는 용도로는 객체가 셋 안에 존재하는지 아닌지 체크 용도로 거의 쓰인다.
+
+```js
+const naughty = new WeakSet();
+
+const children = [
+    {name : 'Wabi'},
+    {name : 'Yuna'}
+];
+
+naughty.add(children[1]);
+
+for(let child of children){
+    if(naughty.has(child)){
+        console.log(`This child ${child.name} is naughty`);
+    }else{
+        console.log(`This child ${child.name} is kind and good`);
+    }
+}
+```
+
