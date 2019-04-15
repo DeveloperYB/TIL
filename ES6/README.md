@@ -1,6 +1,9 @@
 # ES6 : review
 
+> 하단 모든 글 참조는 "Learning JavaScript" (Ethan Brown) 를 기본으로 참조합니다.
+
 - [스코프](./scope.md)
 - [배열](./array.md)
 - [Map & Set](./map_set.md)
+- [예외, 예외처리](./error.md)
 - [OOP : ES6 class](./OOP.md)
