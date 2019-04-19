@@ -3,6 +3,15 @@
 > ES6 에서 이터레이터 & 제너레이터를 도입되었다.\
 제너레이터는 이터레이터에 의존하는 개념이다.
 
+## Iterables ?
+
+> 객체는 값이 for..of 구조 내에서 반복되는 것 같은 그 반복 동작을 정의하는 경우 반복이 가능(iterable)하다.\
+Array 또는 Map과 같은 일부 내장 형은 기본 반복 동작이 있지만 다른 형(가령 Object)은 없다.
+
+> `내장 iterable`\
+String, Array, TypedArray, Map 및 Set은 모두 내장 반복가능 객체, 이 객체들은 프로토타입 객체가 모두 Symbol.iterator 메서드가 있기 때문이다.
+
+
 ```js
 const num = [
     1,2,3,4,5
@@ -69,3 +78,4 @@ it.next(); // {value: , 5 : false}
 it.next(); // {value: , 6 : false}
 it.next(); // {undefined: , 6 : true}
 ```
+
