@@ -79,5 +79,22 @@ it.next(); // {value: , 6 : false}
 it.next(); // {undefined: , 6 : true}
 ```
 
-> 제너레잍너란? 요약\
+> 제너레이터란? 요약\
 Generator는 Iterator를 반환하는 함수이다. Generator 함수는 function 다음에 " * "가 추가되고 내부 새로운 키워드인 yield를 사용한다. 별표가 function 바로 앞에 있는지 또는 *와 function 사이에 공백이 있는지는 중요하지 않다.
+
+---
+
+### yield 표현식과 양방향 통신
+
+```js
+function *interrogate(){
+    const name = yield 'What is your name?';
+    const color = yield 'What is your favorite color?'
+    return `${name}'s favorite color is ${color}.`;
+}
+
+const it = interrogate();
+it.next(); // {value:'What is your name?', done:false}
+it.next('Wabi'); // {value:'What is your favorite color?', done:false}
+it.next('red'); // {value:'Wabi's favorite color is red.', done:true}
+```
