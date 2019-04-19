@@ -79,3 +79,5 @@ it.next(); // {value: , 6 : false}
 it.next(); // {undefined: , 6 : true}
 ```
 
+> 제너레잍너란? 요약\
+Generator는 Iterator를 반환하는 함수이다. Generator 함수는 function 다음에 " * "가 추가되고 내부 새로운 키워드인 yield를 사용한다. 별표가 function 바로 앞에 있는지 또는 *와 function 사이에 공백이 있는지는 중요하지 않다.
