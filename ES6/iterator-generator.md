@@ -98,3 +98,26 @@ it.next(); // {value:'What is your name?', done:false}
 it.next('Wabi'); // {value:'What is your favorite color?', done:false}
 it.next('red'); // {value:'Wabi's favorite color is red.', done:true}
 ```
+
+1. 제너레이터는 화살표 함수로 만들수 없고 반드시 function *을 써야합니다.
+2. 제너레이터에서 중요한 값을 절대 return으로 반환하려고 하면 안됩니다. (이유는 하단 코드 참고)
+
+```js
+function* abc(){
+    yield 'a';
+    yield 'b';
+    return 'c';
+}
+
+const it = abc();
+it.next(); // {value : 'a', done : false}
+it.next(); // {value : 'b', done : false}
+it.next(); // {value : 'c', done : true}
+
+//이렇게 value값이 c 까지 반환은 하지만 done이 true로 반환 될 시, for ... of 루프에서 c는 출력되지 않는다. 이유는 done 이 true 이면 value 프로퍼티에 주의를 기울이지 않기 때문이다.
+
+for(let l of abc()){
+    console.log(l);
+}
+// 'a' 와 'b'는 출력되지만 'c'는 출력되지 않는다.
+```
