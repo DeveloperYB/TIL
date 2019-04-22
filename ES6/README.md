@@ -1,6 +1,6 @@
 # ES6 : review
 
-> 하단 모든 글 참조는 "Learning JavaScript" (Ethan Brown) 를 기본으로 참조합니다.
+> 하단 모든 글 참조는 ES6책 "Learning JavaScript" (저자 : Ethan Brown) 를 기본으로 참조합니다.
 
 - [스코프](./scope.md)
 - [배열](./array.md)
