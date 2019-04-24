@@ -7,5 +7,6 @@
 - [Map & Set](./map_set.md)
 - [예외, 예외처리](./error.md)
 - [OOP : ES6 class](./OOP.md)
-- [함수](./function.md)
 - [이터레이터 & 제너레이터](./iterator-generator.md)
+- [함수](./function.md)
+- [서브루틴, 순수한 함수](./pure-function.md)
