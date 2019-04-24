@@ -28,7 +28,7 @@ else{
 > 위 코드를 서브루틴('이하 함수 : Javascript')로 표현하면, (하단코드)
 
 ```js
-function mealTime(){
+function currentMealObj(){
     const hour = new Date().getHours();
     const eat = {
         breakfast : false,
