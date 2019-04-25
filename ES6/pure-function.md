@@ -10,7 +10,7 @@
 ```js
 const hour = new Date().getHours();
 let Lunch = false;
-if(12<=hour && hour <= 13) Lunch = true;
+if(12<=hour && hour<=13) Lunch = true;
 ```
 
 > 위 코드가 여러번 반복되어야 해서, 하단에 함수로 바꾸면,
@@ -19,7 +19,7 @@ if(12<=hour && hour <= 13) Lunch = true;
 function isCurrentLunch(){
     const hour = new Date().getHours();
     let Lunch = false;
-    if(12<=hour && hour <= 13) Lunch = true;
+    if(12<=hour && hour<=13) Lunch = true;
     else Lunch = false;
     return Lunch;
 }
@@ -38,7 +38,7 @@ function isCurrentLunch(){
 ```js
 function isCurrentLunch(hour){
     let Lunch = false;
-    if(12<=hour && hour <= 13) Lunch = true;
+    if(12<=hour && hour<=13) Lunch = true;
     else Lunch = false;
     return Lunch;
 }
