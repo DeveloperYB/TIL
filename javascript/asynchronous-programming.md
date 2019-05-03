@@ -185,3 +185,11 @@ countdown(5).then(
 // success
 ```
 
+### 예시 2) 이벤트 : Node.js
+
+이벤트가 일어나면 이벤트 발생을 담당하는 개체 에서 이벤트가 일어났음을 알린다. 필요한 이벤트는 모두 콜벡을 통해서 주시할 수 있다. 노드에서는 이벤트를 지원하는 모듈 EventEmmitter가 내장되어 있다. (클래스와 함께 하도록 설계되어있으므로, 위 예시 1 countdown 함수를 클래스로 하단 예시코드에서는 바꾼다.)
+
+```js
+const EventEmitter = require('events').EventEmitter;
+```
+
