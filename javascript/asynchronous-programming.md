@@ -200,17 +200,40 @@ class Countdown extends EventEmitter {
     }
     go(){
         const countdown = this;
+        const timeoutIds = [];
         return new Promise(function(resolve, reject){
             for(let i = countdown.seconds; i >= 0; i--){
-                setTimeout(function(){
-                    if(countdown.superstitious && i === 13)
+                timeoutIds.push(setTimeout(function(){
+                    if(countdown.superstitious && i === 13){
+                        // 13 일때는 중지 : 대기중인 타임아웃을 전부 취소.
+                        timeoutIds.forEach(clearTimeout);
                         return reject(new Error('WTF ERROR!'));
+                    }
                     countdown.emit('tick',i);
-                    if(i === 0 ) resolve()/
-                }, (countdown.seconds - i)*1000);
+                    if(i === 0) resolve();
+                }, (countdown.seconds - i)*1000));
             }
         });
     }
 }
+```
+
+EventEmmitter 를 상속하는 클래스는 이벤트를 발생시킬 수 있다. 카운트다운을 시작하고 프로미스를 반환하는 매서드는 go 부분 내부이다.\
+카운트가 13일 경우는 에러를 반환하고, this에 특별한 변수를 넣었기 때문에 해당 this를 통해서 프로미스 내부에서 쓸 수 있다.\
+`countdown.emit('tick', i)`는 'tick' 이벤트를 발생시키는 부분이다.
+
+사용은 하단 코드를 참조.
+
+```js
+const countFn = new Countdown(5);
+
+countFn.on('tick', function(i){
+    if(i > 0) console.log(i + '...');
+});
+countFn.go().then(function(){
+    console.log('The end!');
+}).catch(function(err){
+    console.error(err.message);
+});
 ```
 
