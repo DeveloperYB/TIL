@@ -25,11 +25,12 @@ A형 간염 때문에 사람들이 많이 아프자, 많은 사람들이 예방�
 
 ---
 
-## 자바스크립트 비동기적 프로그래밍 3 가지 패러다임
+## 자바스크립트 비동기적 프로그래밍 4 가지 패러다임
 
 1. Callback
 2. Promise
 3. Generator
+4. async/await
 
 제너레이터 자체로는 비동기적 프로그래밍을 지원하지 않기 때문에 프로미스나 콜백과 함께 사용해야 한다. 마찬가지로 프로미스도 콜백과 함께 사용해야한다.
 
@@ -437,3 +438,100 @@ countdown(2)
 
 제너레이터는 함수와 호출자 사이의 양방향 통신이 가능하다. 제너레이터는 동기적 성격을 가지고 있지만 프로미스와 같이 사용을 하면 훨씬 더 관리하기 효율적인 비동기 코드를 만들 수 있다.
 
+### Generator 기초 예시 ) 데이터 이동 : yield -> next()
+```js
+function* getHidikiMembers() {
+  yield 'Wabi';
+  yield 'Teak';
+  yield 'Tesilio';
+  yield 'One';
+  yield 'Hidekuma';
+}
+
+const hidikiMembers = getHidikiMembers();
+console.log(hidikiMembers.next()); // {value: "Wabi", done: false}
+console.log(hidikiMembers.next()); // {value: "Teak", done: false}
+console.log(hidikiMembers.next()); // {value: "Tesilio", done: false}
+console.log(hidikiMembers.next()); // {value: "One", done: false}
+console.log(hidikiMembers.next()); // {value: "Hidekuma", done: false}
+console.log(hidikiMembers.next()); // {value: undefined, done: true}
+```
+
+### Generator 기초 예시 ) 데이터 이동 : next() -> yield
+```js
+function *askFavoriteColor(){
+    const name = yield 'What is your name?';
+    const color = yield 'What is your favorite color?'
+    return `${name}'s favorite color is ${color}.`;
+}
+
+const wfc = askFavoriteColor();
+wfc.next(); // {value:'What is your name?', done:false}
+wfc.next('Wabi'); // {value:'What is your favorite color?', done:false}
+wfc.next('red'); // {value:'Wabi's favorite color is red.', done:true}
+```
+
+- 함수 내부 `yield` 마다 반환&제어되고 `next()` 를 통해 순환 흐름이 생성된다.
+- 제너레이터 함수의 `next()` 와 함수 내부 `yield` 가 서로 데이터를 주고받을 수 있다는 점을 예시에서 확인할 수 있다.
+
+1. 제너레이터는 화살표 함수로 만들수 없고 반드시 function *을 써야한다.
+2. 제너레이터에서 중요한 값을 절대 return으로 반환하려고 하면 안된다. (이유는 하단 코드 참고)
+
+```js
+function* abc(){
+    yield 'a';
+    yield 'b';
+    return 'c';
+}
+
+const it = abc();
+it.next(); // {value : 'a', done : false}
+it.next(); // {value : 'b', done : false}
+it.next(); // {value : 'c', done : true}
+
+//이렇게 value값이 c 까지 반환은 하지만 done이 true로 반환 될 시, for ... of 루프에서 c는 출력되지 않는다. 이유는 done 이 true 이면 value 프로퍼티에 주의를 기울이지 않기 때문이다.
+
+for(let l of abc()){
+    console.log(l);
+}
+// 'a' 와 'b'는 출력되지만 'c'는 출력되지 않는다.
+```
+
+### 예시 )
+
+```js
+const users = ['Wabi','Teak','Tesilio','Hidekuma','One'];
+
+const getRandomIdx = obj => new Promise(resolve => {
+  setTimeout(() => resolve({
+      ...obj,
+      idx : Math.floor(Math.random() * users.length)
+  }), 1000);
+});
+
+const getUserByIdx = obj => new Promise(resolve => {
+  setTimeout(() => resolve({
+      ...obj,
+      name : users[obj.idx]
+  }), 1000);
+});
+
+// 프로미스 활용할 경우
+Promise.resolve({})
+.then(getRandomIdx)
+.then(getUserByIdx)
+.then(obj => console.log(`배열 ${obj.idx+1} 번째 ${obj.name}가 있습니다.`))
+```
+
+제너레이터를 사용하기 위한 실행 라이브러리 & 제너레이터 사용 라이브러리
+- [co : 제너레이터 실행기](https://github.com/tj/co)
+- [Koa](https://koajs.com/),
+- [Redux-saga](https://github.com/redux-saga/redux-saga)
+
+제너레이터를 사용하기위해서 직접 실행 함수를 만들기보다는 위 3가지 라이브러리 등 프로젝트에 알맞게 이미 만들어진 실행기를 쓰는 것이 시간 절약하기에 좋다.
+
+---
+
+## 패러다임 4. async/await
+
+[async/await 는 generator를 기반으로 만들어졌다.](https://tc39.github.io/ecmascript-asyncawait/)
