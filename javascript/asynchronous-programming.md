@@ -30,7 +30,7 @@ A형 간염 때문에 사람들이 많이 아프자, 많은 사람들이 예방�
 1. Callback
 2. Promise
 3. Generator
-4. async/await
+4. async/await (ES8) - babel 필수
 
 제너레이터 자체로는 비동기적 프로그래밍을 지원하지 않기 때문에 프로미스나 콜백과 함께 사용해야 한다. 마찬가지로 프로미스도 콜백과 함께 사용해야한다.
 
@@ -475,7 +475,7 @@ wfc.next('red'); // {value:'Wabi's favorite color is red.', done:true}
 - 제너레이터 함수의 `next()` 와 함수 내부 `yield` 가 서로 데이터를 주고받을 수 있다는 점을 예시에서 확인할 수 있다.
 
 1. 제너레이터는 화살표 함수로 만들수 없고 반드시 function *을 써야한다.
-2. 제너레이터에서 중요한 값을 절대 return으로 반환하려고 하면 안된다. (이유는 하단 코드 참고)
+2. 반복문으로 사용시, 제너레이터에서 중요한 값을 절대 return으로 반환하려고 하면 안된다. (이유는 하단 코드 참고)
 
 ```js
 function* abc(){
@@ -489,7 +489,9 @@ it.next(); // {value : 'a', done : false}
 it.next(); // {value : 'b', done : false}
 it.next(); // {value : 'c', done : true}
 
-//이렇게 value값이 c 까지 반환은 하지만 done이 true로 반환 될 시, for ... of 루프에서 c는 출력되지 않는다. 이유는 done 이 true 이면 value 프로퍼티에 주의를 기울이지 않기 때문이다.
+/*이렇게 value값이 c 까지 반환은 하지만 done이 true로 반환 될 시,
+for ... of 루프에서 c는 출력되지 않는다.
+이유는 done 이 true 이면 value 프로퍼티에 주의를 기울이지 않기 때문이다.*/
 
 for(let l of abc()){
     console.log(l);
@@ -497,7 +499,7 @@ for(let l of abc()){
 // 'a' 와 'b'는 출력되지만 'c'는 출력되지 않는다.
 ```
 
-### 예시 )
+### 예시 ) 프로미스 -> 제너레이터
 
 ```js
 const users = ['Wabi','Teak','Tesilio','Hidekuma','One'];
@@ -536,6 +538,93 @@ Promise.resolve({})
 })
 .then(nextName => console.log(`배열 ${resultObj.idx+1} 번째 ${resultObj.name}가 있습니다. 그리고 다음순서는 ${nextName}`));
 ```
+#### 콘솔로그 결과 (랜덤이기 때문에 이름,IDX 가 다를 수 있다.)
+```
+배열 1 번째 Wabi가 있습니다.
+배열 5 번째 One가 있습니다. 그리고 다음순서는 없습니다.
+```
+#### 위 프로미스 코드를 제너레이터 활용
+```js
+//잘못된 활용
+function* gen () {
+  const objId = yield getRandomIdx();
+  const objName = yield getUserByIdx();
+  console.log({...objId,...objName});
+}
+const g = gen();
+g.next(); // {value: Promise, done: false}
+g.next(); // {value: Promise, done: false}
+g.next(); // {value: undefined, done: true}
+//Uncaught TypeError: Cannot read property 'idx' of undefined
+//위 처럼 잘못되는 이유는 next() 가 프로미스를 value 로 반환 하기 때문이다.
+
+//옳바른 활용
+function* gen () {
+  const objId = yield getRandomIdx();
+  const objName = yield getUserByIdx(objId);
+  yield getNextUserByName(objName.idx+1);
+}
+const g = gen();
+g.next().value.then(objId => {
+    g.next(objId).value.then(objName => {
+        //objName 상태
+        /*
+        {
+            value : {
+                idx : 1,
+                name : "Teak"
+            },
+            done : false
+        }
+        */
+        g.next(objName).value.then(nextName => {
+            console.log(`배열 ${resultObj.idx+1} 번째 ${resultObj.name}가 있습니다. 그리고 다음순서는 ${nextName}`)
+        });
+    });
+});
+```
+#### 콘솔로그 결과 (랜덤이기 때문에 이름,IDX 가 다를 수 있다.)
+```
+배열 5 번째 One가 있습니다. 그리고 다음순서는 Hidekuma
+```
+#### 위 제너레이터의 호출 순서 정리
+```text
+next(main) → promise(gen) → yield(gen) → then(main) →  // Object id 획득
+next(main) → promise(gen) → yield(gen) → then(main) → // Object name 획득
+next(main) → promise(gen) → yield(gen) → then(main) → // nextName 획득
+
+console.log(`배열 ${resultObj.idx+1} 번째 ${resultObj.name}가 있습니다. 그리고 다음순서는 ${nextName}`)
+```
+
+main과 generator('gen') 사이에서 제어권을 서로 주고 받는 것을 볼 수 있다. 이것을 코루틴(coroutine)이라고 부른다. 코루틴이란 여러개의 함수를 반환값 없이 중단 및 실행 시킬수 있는 제어구조를 말한다.
+
+위 처럼 코루틴을 수동으로 콜백 지옥 처럼 제너레이터를 쓴다면 비동기 처리 부분만 편하게 만들 뿐, 제너레이터 실행부분에서 또 힘들게 된다.
+그래서 제너레이터 실행함수를 따로 만들어서 활용한다.
+
+```js
+const co = gen => new Promise(resolve => {
+  const g = gen();
+  const onFulfilled = res => {
+    const ret = g.next(res);
+    next(ret);
+  }
+  const next = ret => {
+    if (ret.done) return resolve(ret.value);
+    return ret.value.then(onFulfilled)
+  }
+  onFulfilled();
+});
+
+function* gen () {
+  const objId = yield getRandomIdx();
+  const objName = yield getUserByIdx(objId);
+  return getNextUserByName(objName.idx+1);
+  //co 함수 내부 ret.done 값이 true 일때 종료하기위해 return을 사용하였다.
+}
+co(gen).then(user => console.log(user)); // Teak (랜덤한 이름)
+```
+
+위 처럼 실행함수 사용하면 제너레이터 사용하는 부분도 쉽게 구현 가능하다.
 
 제너레이터를 사용하기 위한 실행 라이브러리 & 제너레이터 사용 라이브러리
 - [co : 제너레이터 실행기](https://github.com/tj/co)
@@ -548,4 +637,84 @@ Promise.resolve({})
 
 ## 패러다임 4. async/await
 
+- callback이나 promise 이후로 나온 비동기 코드를 작성하는 새로운 방법이다.
+- 실제로는 최상위에 위치한 promise를 사용하는 방식이다.
+- plain callback 이나 node callback과 함께 사용할 수 없다.
+- 작업은 비동기 코드이지만, 코드의 모양새는 동기 코드와 유사하게 만들어 준다.
+- async 함수 내부에만 await 를 쓸 수 있다. (= 코드 최상위 스코프에서는 사용할 수 없다.)
+- 모든 async 함수는 promise를 반환한다.
+
 [async/await 는 generator를 기반으로 만들어졌다.](https://tc39.github.io/ecmascript-asyncawait/)
+Node는 7.6 버전부터는 async/await 를 별도의 도구없이도 지원하기 시작했고, Node 8 LTS 는 Asnyc/Await를 완벽하게 지원하기로 했다. 이처럼 지원이 확정된 이유로는 async/await 는 promise 에 비해 훨씬 직관적이고 사용법도 쉬울 뿐더러, 코드 이해도 향상에도 도움을 준다.
+
+### 예시 ) 위 예시 프로미스를 바꿔본다.
+
+```js
+const users = ['Wabi','Teak','Tesilio','Hidekuma','One'];
+
+const getRandomIdx = obj => new Promise(resolve => {
+  setTimeout(() => resolve({
+      ...obj,
+      idx : Math.floor(Math.random() * users.length)
+  }), 1000);
+});
+
+const getUserByIdx = obj => new Promise(resolve => {
+  setTimeout(() => resolve({
+      ...obj,
+      name : users[obj.idx]
+  }), 1000);
+});
+
+const getNextUserByName = idx => new Promise(resolve=>{
+    setTimeout(() => resolve(users[idx] || '없습니다.',1000));
+});
+// 프로미스 활용
+let resultObj;
+Promise.resolve({})
+.then(getRandomIdx)
+.then(getUserByIdx)
+.then(obj => {
+    resultObj = {...obj};
+    return getNextUserByName(obj.idx+1);
+})
+.then(nextName => console.log(`배열 ${resultObj.idx+1} 번째 ${resultObj.name}가 있습니다. 그리고 다음순서는 ${nextName}`));
+
+// async await 활용
+const result = async () => {
+    const objIdx = await getRandomIdx();
+    const objName = await getUserByIdx(objIdx);
+    const nextName = await getNextUserByName(objName.idx + 1);
+    return `배열 ${objName.idx+1} 번째 ${objName.name}가 있습니다. 그리고 다음순서는 ${nextName}`;
+}
+result().then(res=>console.log(res))
+```
+#### 콘솔로그 결과 (랜덤이기 때문에 이름,IDX 가 다를 수 있다.)
+```
+배열 5 번째 One가 있습니다. 그리고 다음순서는 없습니다.
+```
+
+한눈에 보기에도 너무 간결하고 쉽게 구현할 수 있다.\
+심지어 에러 헨들링 조차 쉽게할 수 있다. 이전의 프로미스는 `promise.catch`로 에러를 잡아야 했다면, `async/await`는 동기와 비동기 에러 모두를 `try/catch` 으로도 처리할 수 있게 해준다.
+
+### 예시 )
+```js
+// async await 활용
+const result = async () => {
+    try{
+        const objIdx = await getRandomIdx();
+        const objName = await getUserByIdx(objIdx);
+        const nextName = await getNextUserByName(objName.idx + 1);
+        return `배열 ${objName.idx+1} 번째 ${objName.name}가 있습니다. 그리고 다음순서는 ${nextName}`;
+    }catch(err){
+        console.error(err);
+    }
+}
+result().then(res=>console.log(res))
+```
+
+### async/await 의 단점
+
+1. async 함수를 사용하면 내부에서 무조건 promise를 사용해야 된다.
+2. 비동기 코드를 동기 코드처럼 보이게 해주니 데이터 반환 시점에 대해 큰 고려를 못하고 지나칠 수도 있다.
+3. 크로스 브라우징을 위해서 babel 필수적으로 따라온다.
