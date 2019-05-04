@@ -312,3 +312,112 @@ console.error : 카운트 다운 실패
 
 위 예시 코드로 알 수 있듯이 프로미스 체인을 이용하면 모든 단계의 에러를 한번에 캐치할 수 있다. 체인 중 어느 한곳의 에러만으로도 catch 핸들러가 동작한다.
 
+### 예시 4) 결정되지 않는 프로미스 방지
+
+프로미스를 웹 통신에 사용하거나, 특정 함수에 사용을 하는데 해당 프로미스가 만약 너무 오래걸리는 통신이나, 오래걸리는 알고리즘이거나, 또는 promise resolve reject 호출하는 것을 잊어서 프로미스가 성공이나 실패로 결정나지 않는다면 프로미스는 자체적으로 결정되지 않았다고 해결하지 못한다.
+
+위 문제를 프로미스에 타임아웃을 걸어서 걸어둔 시간 이후로도 응답이 없다면 reject를 시키는 코드를 짤 수 있다.
+
+```js
+function halfFail(){
+    return new Promise(function(resolve, reject){
+        if(Math.random() < 0.5) return; //아래 resolve 도달 불가
+        console.log('2초 뒤 완료.');
+        setTimeout(function(){
+            resolve('완료!!');
+        },2000)
+    });
+}
+```
+
+위 코드는 50% 확률로 프로미스의 resolve를 반환 안한다.
+
+```js
+halfFail().then(msg => console.log(msg));
+```
+```
+console.log : 2초 뒤 완료.
+console.log : 완료 (2초뒤)
+
+또는 아무런 log 노출 없음 (= 결정이 안된 프로미스)
+```
+
+위 예시처럼 코드를 잘못 만들지는 않지만, 같은 결과로 프로미스가 반환되지 않는 경우 또는 개발자가 프로미스 반환시간에 제한을 걸어야 하는 경우가 생길 수도 있다.
+
+```js
+function addTimeout(fn, timeout = 1000){
+    return function(...args){
+        return new Promise(function(resolve, reject){
+            const tid = setTimeout(reject, timeout, new Error('프로미스 타임아웃'));
+            fn(...args).then(function(...args){
+                clearTimeout(tid);
+                resolve(...args);
+            }).catch(function(...args){
+                clearTimeout(tid);
+                reject(...args);
+            });
+        });
+    }
+}
+```
+
+#### 위 코드 사용 예시
+
+```js
+function addTimeout(fn, timeout = 1000){
+    return function(...args){
+        return new Promise(function(resolve, reject){
+            const tid = setTimeout(reject, timeout, '프로미스 타임아웃');
+            fn(...args).then(function(...args){
+                clearTimeout(tid);
+                resolve(...args);
+            }).catch(function(...args){
+                clearTimeout(tid);
+                reject(...args);
+            });
+        });
+    }
+}
+function countdown(seconds){
+    return new Promise(function(resolve, reject){
+        for(let i = seconds; i >= 0; i--){
+            setTimeout(function(){
+                if(i > 0) timeLog(i);
+                else resolve('카운트 다운 종료');
+            }, (seconds - i)*1000);
+        }
+    });
+}
+function halfFail(){
+    return new Promise(function(resolve, reject){
+        if(Math.random() < 0.5) return; //아래 resolve 도달 불가
+        console.log('2초 뒤 완료.');
+        setTimeout(function(){
+            resolve('완료!!');
+        },2000)
+    });
+}
+
+countdown(2)
+.then(msg => console.log(msg))
+.then(addTimeout(halfFail, 3000))
+.then(msg => console.log(msg))
+.catch(err => console.error(err));
+```
+
+위 코드를 테스트하다보면 아래와 같은 결과가 나온다.
+
+```
+console.log : 2...
+console.log : 1...
+console.log : 카운트 다운 종료
+console.log : 2초 뒤 완료.
+console.log : 완료!!
+```
+또는
+```
+console.log : 2...
+console.log : 1...
+console.log : 카운트 다운 종료
+console.error : 프로미스 타임아웃
+```
