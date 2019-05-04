@@ -152,9 +152,8 @@ fs.readFile('wabi_report_04_27.txt', function(err, dataA){
 - 단 한번의 성공 또는 실패로 해당 프로미스는 결정되었다고 한다. (= settled)
 - 프로미스는 객체이다. (= 어디든 전달할 수 있다.)
 - 성공, 실패의 중간 단계인 10,20,~50% 완료 라는 진행상황 개념이 없다.
-
-> 부연 설명.\
-프로미스는 객체이므로 전달을 통해 처리를 다른 함수에서 하게 할 수 있다.
+- 프로미스는 객체이므로 전달을 통해 처리를 다른 함수에서 하게 할 수 있다.
+- 프로미스는 체인으로 연결할 수 있는 장점이 있다.
 
 ### 예시 1)
 
@@ -187,7 +186,7 @@ countdown(5).then(
 
 ### 예시 2) 이벤트 : Node.js
 
-이벤트가 일어나면 이벤트 발생을 담당하는 개체 에서 이벤트가 일어났음을 알린다. 필요한 이벤트는 모두 콜벡을 통해서 주시할 수 있다. 노드에서는 이벤트를 지원하는 모듈 EventEmmitter가 내장되어 있다. (클래스와 함께 하도록 설계되어있으므로, 위 예시 1 countdown 함수를 클래스로 하단 예시코드에서는 바꾼다.)
+이벤트가 일어나면 이벤트 발생을 담당하는 개체 에서 이벤트가 일어났음을 알린다. 필요한 이벤트는 모두 콜벡을 통해서 주시할 수 있다. 노드에서는 이벤트를 지원하는 모듈 EventEmmitter가 내장되어 있다. (클래스와 함께 하도록 설계되어있으므로, 위 예시 1 코드 countdown 함수를 클래스로 하단 예시코드에서는 바꾼다.)
 
 ```js
 const EventEmitter = require('events').EventEmitter;
@@ -236,4 +235,80 @@ countFn.go().then(function(){
     console.error(err.message);
 });
 ```
+
+### 예시 3) 프로미스 체인
+
+```js
+function runToGoal(){
+    return new Promise(function(resolve, reject){
+        console.log('5초 동안 스퍼트!!, 달린다');
+        setTimeout(function(){
+            resolve('도착!!!');
+        }, 5000);
+    });
+}
+function timeLog(time){
+    console.log(`${time}...`);
+}
+function countdown(seconds){
+    const timeoutIds = [];
+    return new Promise(function(resolve, reject){
+        for(let i = seconds; i >= 0; i--){
+            timeoutIds.push(setTimeout(function(){
+                if(i === 13){
+                    timeoutIds.forEach(clearTimeout);
+                    //clearTimeout 으로 모든 setTimeout 대기를 막지 않으면 13 이후 12 아래로 다 콘솔로그가 프린트된다.
+                    return reject('카운트 다운 실패');
+                }
+                if(i > 0) timeLog(i);
+                else resolve('카운트 다운 종료');
+            }, (seconds - i)*1000));
+        }
+    });
+}
+```
+
+위 예시 코드를 하단에 성공과 실패로 나뉘어서 실행예시를 들어온다.
+
+#### 성공
+```js
+var test = countdown(5);
+test.then(msg => console.log(msg))
+.then(runToGoal)
+.then(msg => console.log(msg))
+.catch(err => console.error(err));
+```
+위 코드 console.log 프린트
+```
+console.log : 5...
+console.log : 4...
+console.log : 3...
+console.log : 2...
+console.log : 1...
+console.log : 카운트 다운 종료
+
+(runToGoal 함수 시작)
+console.log : 5초 동안 스퍼트!!, 달린다
+
+(5초뒤)
+
+console.log : 도착!!!
+```
+
+#### 실패
+```js
+var test = countdown(13);
+test.then(msg => console.log(msg))
+.then(runToGoal)
+.then(msg => console.log(msg))
+.catch(err => console.error(err));
+```
+위 코드 console.log 프린트
+```
+console.log : 15...
+console.log : 14...
+console.error : 카운트 다운 실패
+```
+
+위 예시 코드로 알 수 있듯이 프로미스 체인을 이용하면 모든 단계의 에러를 한번에 캐치할 수 있다. 체인 중 어느 한곳의 에러만으로도 catch 핸들러가 동작한다.
 
