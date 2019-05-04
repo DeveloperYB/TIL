@@ -645,7 +645,7 @@ co(gen).then(user => console.log(user)); // Teak (랜덤한 이름)
 - 모든 async 함수는 promise를 반환한다.
 
 [async/await 는 generator를 기반으로 만들어졌다.](https://tc39.github.io/ecmascript-asyncawait/)
-Node는 7.6 버전부터는 async/await 를 별도의 도구없이도 지원하기 시작했고, Node 8 LTS 는 Asnyc/Await를 완벽하게 지원하기로 했다. 이처럼 지원이 확정된 이유로는 async/await 는 promise 에 비해 훨씬 직관적이고 사용법도 쉬울 뿐더러, 코드 이해도 향상에도 도움을 준다.
+Node는 7.6 버전부터는 async/await 를 별도의 도구없이도 지원하기 시작했고, Node 8 버전부터는 async/await를 완벽하게 지원한다. 이처럼 지원이 확정된 이유로는 async/await 는 promise 에 비해 훨씬 직관적이고 사용법도 쉬울 뿐더러, 코드 이해도 향상에도 도움을 준다.
 
 ### 예시 ) 위 예시 프로미스를 바꿔본다.
 
