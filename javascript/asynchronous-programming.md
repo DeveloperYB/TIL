@@ -297,7 +297,7 @@ console.log : 도착!!!
 
 #### 실패
 ```js
-var test = countdown(13);
+var test = countdown(15);
 test.then(msg => console.log(msg))
 .then(runToGoal)
 .then(msg => console.log(msg))
