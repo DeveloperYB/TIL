@@ -11,8 +11,11 @@ Javascript 는 단일 스레드에서 동작하기 때문에 한 번에 한 가�
 
 ## 콜백, 프로미스 비유 예시
 
-A형 간염 때문에 사람들이 많이 아프자, 많은 사람들이 예방접종을 하루 빨리 맞기 위해서 보건소에 몰려들었다.  "콜백 보건소" 에서는 사람들이 줄서고 기다리지 않도록, 사람들의 전화번호를 받았다가 차례가 돌아오면 전화를 해준다. (= 콜백 방식)\
-"프로미스 보건소" 에서는 차례가 되면 진동이 울리는 호출기를 사람들에게 전해준다. (= 프로미스 방식)\
+A형 간염 때문에 사람들이 많이 아프자, 많은 사람들이 예방접종을 하루 빨리 맞기 위해서 보건소에 몰려들었다.
+
+"콜백 보건소" 에서는 사람들이 줄서고 기다리지 않도록, 사람들의 전화번호를 받았다가 차례가 돌아오면 전화를 해준다. (= 콜백 방식)
+
+"프로미스 보건소" 에서는 차례가 되면 진동이 울리는 호출기를 사람들에게 전해준다. (= 프로미스 방식)
 
 
 ### 비유 예시 요약
@@ -42,13 +45,13 @@ setTimeout(function(){
 }, 5000); // 5 seconds
 console.log("test 1");
 console.log("test 2");
-
-// -------- console.log print
-
-//Before setTimeout 5 seconds : HI
-//test 1
-//test 2
-//After setTimeout 5 seconds : BYE
+```
+#### 콘솔로그 결과
+```
+Before setTimeout 5 seconds : HI
+test 1
+test 2
+After setTimeout 5 seconds : BYE
 ```
 ### 예시 2)
 ```js
@@ -62,30 +65,30 @@ const intervalId = setInterval(function(){
     }
     console.log(`${i} : ${now} Sec`);
 },3000);
-
-// -------- console.log print
-
-// 0 : 10 Sec
-3초 뒤
-// 1 : 9 Sec
-3초 뒤
-// 2 : 8 Sec
-3초 뒤
-// 3 : 7 Sec
-3초 뒤
-// 4 : 6 Sec
-3초 뒤
-// 5 : 5 Sec
-3초 뒤
-// 6 : 4 Sec
-3초 뒤
-// 7 : 3 Sec
-3초 뒤
-// 8 : 2 Sec
-3초 뒤
-// 9 : 1 Sec
-3초 뒤
-// 10 : 0 Sec
+```
+#### 콘솔로그 결과
+```
+0 : 10 Sec
+(3초 뒤)
+1 : 9 Sec
+(3초 뒤)
+2 : 8 Sec
+(3초 뒤)
+3 : 7 Sec
+(3초 뒤)
+4 : 6 Sec
+(3초 뒤)
+5 : 5 Sec
+(3초 뒤)
+6 : 4 Sec
+(3초 뒤)
+7 : 3 Sec
+(3초 뒤)
+8 : 2 Sec
+(3초 뒤)
+9 : 1 Sec
+(3초 뒤)
+10 : 0 Sec
 ```
 
 > 참고 사항.\
@@ -174,14 +177,16 @@ countdown(5).then(
         console.log('success');
     }
 );
-
-// 5...
-// 4...
-// 3...
-// 2...
-// 1...
-// The end!
-// success
+```
+#### 콘솔로그 결과
+```
+5...
+4...
+3...
+2...
+1...
+The end!
+success
 ```
 
 ### 예시 2) 이벤트 : Node.js
@@ -278,21 +283,21 @@ test.then(msg => console.log(msg))
 .then(msg => console.log(msg))
 .catch(err => console.error(err));
 ```
-위 코드 console.log 프린트
+#### 콘솔로그 결과
 ```
-console.log : 5...
-console.log : 4...
-console.log : 3...
-console.log : 2...
-console.log : 1...
-console.log : 카운트 다운 종료
+5...
+4...
+3...
+2...
+1...
+카운트 다운 종료
 
 (runToGoal 함수 시작)
-console.log : 5초 동안 스퍼트!!, 달린다
+5초 동안 스퍼트!!, 달린다
 
 (5초뒤)
 
-console.log : 도착!!!
+도착!!!
 ```
 
 #### 실패
@@ -303,11 +308,11 @@ test.then(msg => console.log(msg))
 .then(msg => console.log(msg))
 .catch(err => console.error(err));
 ```
-위 코드 console.log 프린트
+#### 콘솔로그 결과
 ```
-console.log : 15...
-console.log : 14...
-console.error : 카운트 다운 실패
+15...
+14...
+카운트 다운 실패
 ```
 
 위 예시 코드로 알 수 있듯이 프로미스 체인을 이용하면 모든 단계의 에러를 한번에 캐치할 수 있다. 체인 중 어느 한곳의 에러만으로도 catch 핸들러가 동작한다.
@@ -316,7 +321,7 @@ console.error : 카운트 다운 실패
 
 프로미스를 웹 통신에 사용하거나, 특정 함수에 사용을 하는데 해당 프로미스가 만약 너무 오래걸리는 통신이나, 오래걸리는 알고리즘이거나, 또는 promise resolve reject 호출하는 것을 잊어서 프로미스가 성공이나 실패로 결정나지 않는다면 프로미스는 자체적으로 결정되지 않았다고 해결하지 못한다.
 
-위 문제를 프로미스에 타임아웃을 걸어서 걸어둔 시간 이후로도 응답이 없다면 reject를 시키는 코드를 짤 수 있다.
+위 문제를 프로미스에 타임아웃을 걸어서 걸어둔 시간 이후로도 응답이 없다면 reject를 시키는 코드를 만들 수 있다.
 
 ```js
 function halfFail(){
@@ -335,11 +340,15 @@ function halfFail(){
 ```js
 halfFail().then(msg => console.log(msg));
 ```
+#### 콘솔로그 결과
 ```
-console.log : 2초 뒤 완료.
-console.log : 완료 (2초뒤)
-
-또는 아무런 log 노출 없음 (= 결정이 안된 프로미스)
+2초 뒤 완료.
+(2초뒤)
+완료
+```
+#### 또는
+```
+log 노출 없음 (= 결정이 안된 프로미스)
 ```
 
 위 예시처럼 코드를 잘못 만들지는 않지만, 같은 결과로 프로미스가 반환되지 않는 경우 또는 개발자가 프로미스 반환시간에 제한을 걸어야 하는 경우가 생길 수도 있다.
@@ -405,19 +414,26 @@ countdown(2)
 .catch(err => console.error(err));
 ```
 
-위 코드를 테스트하다보면 아래와 같은 결과가 나온다.
+#### 콘솔로그 결과
 
 ```
-console.log : 2...
-console.log : 1...
-console.log : 카운트 다운 종료
-console.log : 2초 뒤 완료.
-console.log : 완료!!
+2...
+1...
+카운트 다운 종료
+2초 뒤 완료.
+완료!!
 ```
-또는
+#### 또는
 ```
-console.log : 2...
-console.log : 1...
-console.log : 카운트 다운 종료
-console.error : 프로미스 타임아웃
+2...
+1...
+카운트 다운 종료
+프로미스 타임아웃
 ```
+
+---
+
+## 패러다임 3. Generator
+
+제너레이터는 함수와 호출자 사이의 양방향 통신이 가능하다. 제너레이터는 동기적 성격을 가지고 있지만 프로미스와 같이 사용을 하면 훨씬 더 관리하기 효율적인 비동기 코드를 만들 수 있다.
+
