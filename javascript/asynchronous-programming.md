@@ -516,11 +516,25 @@ const getUserByIdx = obj => new Promise(resolve => {
   }), 1000);
 });
 
-// 프로미스 활용할 경우
+// 프로미스 활용할 경우 : 프로미스 함수 매개 변수 삽입과 반환이 Object라면 아래처럼 단순하게 구현 가능.
 Promise.resolve({})
 .then(getRandomIdx)
 .then(getUserByIdx)
 .then(obj => console.log(`배열 ${obj.idx+1} 번째 ${obj.name}가 있습니다.`))
+
+//하지만 삽입 & 반환 데이터 타입이 다르다면 불가피하게 밖에 변수를 활용해야한다.
+const getNextUserByName = idx => new Promise(resolve=>{
+    setTimeout(() => resolve(users[idx] || '없습니다.',1000));
+});
+let resultObj;
+Promise.resolve({})
+.then(getRandomIdx)
+.then(getUserByIdx)
+.then(obj => {
+    resultObj = {...obj};
+    return getNextUserByName(obj.idx+1);
+})
+.then(nextName => console.log(`배열 ${resultObj.idx+1} 번째 ${resultObj.name}가 있습니다. 그리고 다음순서는 ${nextName}`));
 ```
 
 제너레이터를 사용하기 위한 실행 라이브러리 & 제너레이터 사용 라이브러리
