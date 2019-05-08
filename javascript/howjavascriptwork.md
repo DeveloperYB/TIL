@@ -1,6 +1,6 @@
 ## JavaScript 렌더링
 
-<img src="./image/browser_main_components.png" />
+<img src="./images/browser_main_components.png" />
 
 위 그림은 브라우저 기본 구성 요소를 나타낸다.
 
