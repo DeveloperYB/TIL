@@ -6,7 +6,7 @@
 
 |MVC Pattern|Flux Pattern|
 |:---:|:---:|
-|<img src="./images/mvc_pattern.png')" alt="mvc_pattern" />|<img src="./images/flux_pattern.png')" alt="flux_pattern" />|
+|<img src="./images/mvc_pattern.png" alt="mvc_pattern" />|<img src="./images/flux_pattern.png" alt="flux_pattern" />|
 ---
 
 > [출처 : 웹 Frameworks](http://webframeworks.kr/tutorials/react/flux/)
@@ -42,6 +42,6 @@ Flux 패턴의 핵심 개념과 동일하다.
 `(모달 팝업 또는 페이지 로딩바)`
 
 2. 상위 컴포넌트에서 무수히 많은 Depth의 하위 컴포넌트에 상태값을 내려줘야 되는경우\
-<img src="./images/withRedux.png')" alt="withRedux" />
+<img src="./images/withRedux.png" alt="withRedux" />
 
 > [출처 : codecentric Blog](https://blog.codecentric.de/en/2017/12/developing-modern-offline-apps-reactjs-redux-electron-part-3-reactjs-redux-basics/)
