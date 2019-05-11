@@ -2,7 +2,8 @@
 
 ## 리엑트 상태관리값의 불변성?
 
-React는 state 또는 props 의 값이 변경이 되어야 새롭게 다시 렌더링을 하게 된다. `이때 중요한 점으로 변경된 값을 React에서 알기위해 모든 값의 불변성을 유지해주어야 한다.`\
+React는 state 또는 props 의 값이 변경이 되어야 새롭게 다시 렌더링을 하게 된다. `이때 중요한 점으로 변경된 값을 React에서 알기위해 모든 값의 불변성을 유지해주어야 한다.`
+
 [리엑트 공식문서](https://reactjs.org/docs/rendering-elements.html#updating-the-rendered-element)를 읽다보면 `"immutability"` 를 강조하는 것을 볼 수 있다. `(React elements are immutable.)`
 
 ### 불변성 예시
