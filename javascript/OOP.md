@@ -138,5 +138,3 @@ isSub: true
 sneaky: Not recommended! (ingerited)
 */
 ```
-
----
