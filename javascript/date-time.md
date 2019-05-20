@@ -45,4 +45,38 @@ new Date('November 12, 2019 GMT-0000') // Tue Nov 12 2019 09:00:00 GMT+0900 (한
 
 ## 자바스크립트 Date 객체의 문제
 
-가장 큰 문제 중 하나로, 자바스크립트는 타임존을 명시할 방법이 없다. Date 객체는 항상 내부적으로는 UTC 기준으로 저장하지만 출력할 때 운영체제에서 정의한 표준시에 맞게 변환을 하기 때문이다.
+가장 큰 문제 중 하나로, 자바스크립트는 타임존을 명시할 방법이 없다. Date 객체는 항상 내부적으로는 UTC 기준으로 저장하지만 출력할 때 운영체제에서 정의한 표준시에 맞게 변환을 하기 때문이다.\
+위 문제점 때문에, 노드 JS 처럼 자바스크립트를 서버로 가져가서 코딩할 경우에는 Moment.js 라이브러리 (타임존 지원) 을 쓴다.
+
+## 서버에서 날짜 생성
+
+서버에서 날짜를 생성할때는 꼭 UTC를 사용하거나, 타임존을 명시해야한다. 만약 특정지역을 기준으로 날짜를 생성한다면, 클라우드 기반으로 애플리케이션을 운영하면 똑같은 코드가 전 세계 모든 곳에서 실행되는 상황이기 때문에 특정지역을 기준으로 날짜를 생성할 경우 큰 골칫거리가 생기게 된다.
+
+```js
+const test = new Date(Date.UTC(2019, 4, 19));
+console.log(test); // Sun May 19 2019 09:00:00 GMT+0900 (한국 표준시)
+```
+
+> Date.UTC 는 Date의 매개변수를 똑같이 받지만, 새 Date 인스턴스를 반환하지 않고 해당 날짜의 숫자형 값을 반환한다.
+
+## 날짜 데이터 전송
+
+서버에서 브라우저를 날짜로 전성 또는 서버에서 날짜를 받을 경우 그리고 서버와 브러우저가 서로 다른 타임존에 있을 경우 (당연히 유저는 자신을 기준으로 날짜를 보고 싶어한다.) 위 2가지 경우가 복잡하지는 않다. 자바스크립트가 UTC를 기준으로 유닉스 타임스탬프를 저장하기 때문에 Date 객체를 그대로 전송해도 일반적으로 안전하다 하지만 확실한 방법은 JSON을 사용하는 것이 좋다.
+
+```js
+const before = {
+    date : new Date()
+};
+before.date instanceof Date // true
+const json = JSON.stringify(before);
+const after = JSON.parse(json);
+after.date instanceof Date // false
+typeof after.date // string
+```
+
+위 결과처럼 `JSON.stringify`가 된 Date 객체는 다시 parse로 풀어도 문자열로 바뀌지만 날짜 Date 메서드를 다시 사용해서 복구는 가능하다.
+
+```js
+after.date = new Date(after.date);
+after.date instanceof Date // true
+```
