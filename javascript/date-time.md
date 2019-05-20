@@ -80,3 +80,12 @@ typeof after.date // string
 after.date = new Date(after.date);
 after.date instanceof Date // true
 ```
+
+어떤 타임존의 날짜이든지, JSON 인코드 된 UTC 날짜이므로 복구가 가능하다.
+
+
+## 요약
+
+1. 자바스크립트의 날짜는 1970년 1월 1일 UTC로부터 몇 밀리초가 지났는지 숫자로 나타낸다.
+2. 날짜 데이터 생성할 때는 타임존을 주의해야한다.
+3. 날짜 형식을 자유롭게 바꿔서 사용하고 싶다면 Moment.js를 사용하는게 좋다.
