@@ -36,13 +36,25 @@ initial-scale 속성은 페이지가 처음 로드될 때 줌 레벨을 조정�
 ```
 페이지가 검색엔진에 제공하는 키워드를 나타낸다.
 
-<meta property="og:title" content="클래스팅 플레이">
-<meta property="og:description" content="공부를 Play하다! 이제 공부도 플레이 하세요. 클래스팅에서 즐거운 공부를 모았습니다.">
-<meta property="og:image" content="ctplay_link_preview.png">
-<meta property="og:site_name" content="CLASSTING Play" id="og-sitename-value">
-<meta property="og:type" content="website" id="og-type-value">
-<meta property="og:url" content="https://play.classting.com" id="og-url-value">
-<meta property="og:title" content="클래스팅 Play | 즐거운 공부를 체험하다" id="og-title-value">
-<meta property="og:image" content="ctplay_link_preview.png" id="og-image-value">
-<meta name="description" content="초등 한국사, 진로체험, 창의캠프 등 교실 밖 체험학습 프로그램을 제공하는 클래스팅 Play 웹사이트에 오신 것을 환영합니다. 학생이 주인이 되어 즐겁게 참여하는 다양한 현장체험학습 정보를 확인하실 수 있습니다.">
-<meta property="og:description" content="초등 한국사, 진로체험, 창의캠프 등 교실 밖 체험학습 프로그램을 제공하는 클래스팅 Play 웹사이트에 오신 것을 환영합니다. 학생이 주인이 되어 즐겁게 참여하는 다양한 현장체험학습 정보를 확인하실 수 있습니다." id="og-description-value">
+## meta open graph 태그
+
+링크의 미리뵉 제목, 설명, 이미지를 정한다.
+
+<table style="width: 100%;">
+    <tbody>
+        <tr>
+            <td style="width: 70%;">
+                <b>og:url</b> : 페이지의 표준 URL (데스크탑 URL)</br>
+                <b>og:title</b> : 콘텐츠 제목</br>
+                <b>og:description</b> : 콘텐츠 설명. 미리보기에서 제목 아래에 표시</br>
+                <b>og:site_name</b> : 웹 사이트의 이름 (주소 아님)</br>
+                <b>og:image</b> : 콘텐츠를 공유 시 표시되는 이미지의 URL</br>
+                <b>og:type</b> : 뉴스피드에 콘텐츠가 표시되는 방식에 영향을 준다. (기본값은 website) 각 URL은 단일 개체여야 하므로, 여러 og:type 값을 사용할 수 없다.</br>
+                <b>og:locale</b> : 리소스의 언어이다. (기본값은 en_US) 다른 언어로 번역 기능을 사용할 수 있으면 og:locale:alternate도 사용할 수 있다.</br>
+                <b>fb:app_id</b> : 페이스북 인사이트를 사용하기 위한 앱 아이디</br>
+                <b>fb:admins</b> : 웹 사이트용 도메인 인사이트를 사용하기 위한 아이디
+            </td>
+            <td style="width: 30%;"><img src="./images/openGraphExample.png" style="width:100%"/></td>
+        </tr>
+    </tbody>
+</table>
