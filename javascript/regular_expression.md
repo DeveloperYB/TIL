@@ -70,3 +70,5 @@ const txtInput = "I'm studying now on my bed, and my wife is watching tv beside 
 const txtOutput = txtInput.replace(/\w{5,}/ig, '@@@@@');
 // "I'm @@@@@ now on my bed, and my wife is @@@@@ tv @@@@@ me"
 ```
+
+> 정규식을 오로지 큰 문자열에서 부분 문자열을 찾는 방법으로만 국한되어 생각하면, 정규식의 근본적인 성격을 이해하지 못하게 된다. 더군다나 할 수 있는 일도 제한을 두고 생각해게 된다. 좀 더 나은 개념으로는 정규식이 입력 문자열을 소비하는 패턴이라고 생각 하면 된다.
