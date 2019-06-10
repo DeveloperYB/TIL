@@ -14,4 +14,5 @@
 - [화살표 함수](./arrow-function.md)
 - [비동기적 프로그래밍](./asynchronous-programming.md)
 - [날짜와 시간](./date-time.md)
-- [Math](math.md)
+- [Math](./math.md)
+- [정규표현식](./regular_expression.md)
