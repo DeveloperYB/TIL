@@ -41,3 +41,9 @@ echo 'source $(brew --prefix nvm)/nvm.sh' >> .bash_profile
 nvm install 0.12
 nvm alias default 0.12
 ```
+
+# in .bash_profile, .zshrc
+```
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+```
