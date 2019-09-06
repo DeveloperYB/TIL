@@ -111,7 +111,7 @@ props 관점에서, 렌더 props는 props으로 제공되는 정기적인 functi
 
 ---
 
-### 5. HOCs 사용을 섣부르게 하면 안된다.
+### 5. HOCs 사용을 섣부르게 하면 안된다.
 
 > High Order Component를 사용하는 것은 때때로 코드 복잡성을 증가시킬 수 있다.
 
