@@ -171,5 +171,6 @@ props 관점에서, 렌더 props는 props으로 제공되는 정기적인 functi
 
 > 성능 문제를 이해하려고 할 때, 우선적으로 구성 요소가 마운트 또는 렌더링되는 시간을 이해하려고 시도부터 해야한다.
 
+---
 
-[참고 글 링크](https://hackernoon.com/react-native-performance-do-and-dont-1198e97b730a)
+[참고 글 원문 링크](https://hackernoon.com/react-native-performance-do-and-dont-1198e97b730a)
